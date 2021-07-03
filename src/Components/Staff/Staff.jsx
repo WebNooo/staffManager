@@ -68,7 +68,10 @@ export default function Staff (){
             title: 'Должность',
             dataIndex: 'positionId',
             width: "15%",
-            render: (positionId) => <>{state.positions.find(x => x.id === positionId).name}</>,
+            render: (positionId) => {
+                const position = state.positions.find(x => x.id === positionId)
+                return <>{position ? position.name : "Неизветно"}</>
+            },
             sorter: (a, b) => a.positionId - b.positionId
         },
         {
@@ -85,7 +88,7 @@ export default function Staff (){
             align: "center",
             render: (date) => {
                 let item = pass.find(x => x.conditions(date) === true)
-                return <Tag color={item.color}>{item.name}</Tag>
+                return item ? <Tag color={item.color}>{item.name}</Tag> : <Tag color="white">Неизвестно</Tag>
             },
             sorter: (a, b) => new Date(a.actualPassDate) - new Date(b.actualPassDate)
         },
@@ -105,11 +108,15 @@ export default function Staff (){
         setSearchData(state.staff.filter(x => Object.keys(x).some(index => {
             let fieldValue = x[index];
 
-            if (index === "positionId")
-                fieldValue = state.positions.find(d => d.id === fieldValue).name
+            if (index === "positionId") {
+                const position = state.positions.find(d => d.id === fieldValue)
+                fieldValue = position ? position.name : "Неизвестно"
+            }
 
-            if (index === "actualPassDate")
-                fieldValue = pass.find(x => x.conditions(fieldValue) === true).name
+            if (index === "actualPassDate") {
+                const item = pass.find(x => x.conditions(fieldValue) === true)
+                fieldValue = item ? item.name : "Неизвестно"
+            }
 
             if (index === "birthDate")
                 fieldValue = moment(new Date(fieldValue)).format('DD.MM.YYYY')
