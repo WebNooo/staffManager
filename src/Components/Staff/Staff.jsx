@@ -49,7 +49,7 @@ export default function Staff (){
         {
             name: "Истекает срок",
             color: "yellow",
-            conditions: (date) =>  moment(new Date()).diff(moment(new Date(date)), 'month') > 5 && moment(new Date()).diff(moment(new Date(date)), 'month') < 6
+            conditions: (date) =>  moment(new Date()).diff(moment(new Date(date)), 'month') < 6
         },
         {
             name: "Просрочен",
@@ -95,7 +95,7 @@ export default function Staff (){
         onSelect: (record, selected, selectedRows) => {
             setSelectRows(selectedRows);
         },
-        onSelectAll: (selected, selectedRows, changeRows) => {
+        onSelectAll: (selected, selectedRows) => {
             setSelectRows(selectedRows);
         },
     };
@@ -110,6 +110,9 @@ export default function Staff (){
 
             if (index === "actualPassDate")
                 fieldValue = pass.find(x => x.conditions(fieldValue) === true).name
+
+            if (index === "birthDate")
+                fieldValue = moment(new Date(fieldValue)).format('DD.MM.YYYY')
 
             return String(fieldValue).toLowerCase().includes(value.target.value.toLowerCase())}
         )))
@@ -133,7 +136,7 @@ export default function Staff (){
 
         <div className="content">
             <Row className="staff-actions">
-                <Input className="search" prefix={<SearchOutlined />} onChange={search} />  {selectRows.length > 0 && <Button onClick={removeStaff}><DeleteOutlined/> Удалить</Button>}
+                <Input className="search" prefix={<SearchOutlined />} onChange={search} placeholder={"Поиск"} />  {selectRows.length > 0 && <Button onClick={removeStaff}><DeleteOutlined/> Удалить</Button>}
             </Row>
             <Table
                 loading={loading}

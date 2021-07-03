@@ -10,8 +10,7 @@ export default function CreateStaff (props){
     const [form] = Form.useForm();
 
     const addEmployee = (values) => {
-        StaffAction.create(dispatch, {...values, birthDate: values.birthDate.valueOf(), actualPassDate: values.actualPassDate.valueOf()})
-        console.log(state.staff)
+        StaffAction.create(dispatch, {...values, birthDate: new Date(values.birthDate.valueOf()), actualPassDate: new Date(values.actualPassDate.valueOf())})
         form.resetFields();
         toggleVisible()
         message.success(`${values.fio} успешно добавлен(а) в отдел`)

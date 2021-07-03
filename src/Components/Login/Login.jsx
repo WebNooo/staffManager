@@ -21,12 +21,12 @@ function LoginForm() {
 
     const {dispatch} = useContext(ContextApp);
 
-    const onFinish = async (values) => {
+    const onFinish = async () => {
         try {
             const response = await authUser()
             if (response.status === 201 && response.data.message === "success") {
-                dispatch({type: SET_AUTH, auth: true})
                 localStorage.setItem("sessionId", "12345678")
+                dispatch({type: SET_AUTH, auth: true})
             }
         } catch (e) {
             throw new Error(e)
