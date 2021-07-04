@@ -70,7 +70,7 @@ export default function Staff() {
             width: "15%",
             render: (positionId) => {
                 const position = state.positions.find(x => x.id === positionId)
-                return <>{position ? position.name : "Неизветно"}</>
+                return position ? position.name : "Неизветно"
             },
             sorter: (a, b) => a.positionId - b.positionId
         },
@@ -78,7 +78,7 @@ export default function Staff() {
             title: 'Дата рождения',
             dataIndex: 'birthDate',
             width: "15%",
-            render: (date) => <>{moment(new Date(date)).format('DD.MM.YYYY')}</>,
+            render: (date) => moment(new Date(date)).format('DD.MM.YYYY'),
             sorter: (a, b) => new Date(a.birthDate) - new Date(b.birthDate)
         },
         {
