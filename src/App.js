@@ -10,7 +10,7 @@ function App() {
 
     const [state, dispatch] = useReducer(Reducer, initialState);
 
-    if (localStorage.getItem("sessionId") && !state.isAuth){
+    if (localStorage.getItem("sessionId") && !state.isAuth) {
         AuthAction.login(dispatch)
     }
 

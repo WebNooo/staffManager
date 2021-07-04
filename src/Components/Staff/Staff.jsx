@@ -1,4 +1,4 @@
-import {Button, Input, Row, Table, Tag} from "antd";
+import {Button, Input, message, Row, Table, Tag, Tooltip} from "antd";
 import {DeleteOutlined, PlusOutlined, SearchOutlined} from "@ant-design/icons";
 import {useContext, useEffect, useState} from "react";
 import moment from "moment";
@@ -8,7 +8,7 @@ import {PositionAction, StaffAction} from "../../Common/Actions";
 import HeaderPage from "../HeaderPage";
 import CreateStaff from "./CreateStaff";
 
-export default function Staff (){
+export default function Staff() {
     const {state, dispatch} = useContext(ContextApp)
 
     const [loading, setLoading] = useState(true)
@@ -36,9 +36,9 @@ export default function Staff (){
                 StaffAction.set(dispatch, response.data)
                 setLoading(false)
             }
-        })
+        }).catch(reason => message.error("На сервере произошла ошибка, попробуйте позже"))
 
-    }, [dispatch])
+    }, [])
 
     const pass = [
         {
@@ -49,12 +49,12 @@ export default function Staff (){
         {
             name: "Истекает срок",
             color: "yellow",
-            conditions: (date) =>  moment(new Date()).diff(moment(new Date(date)), 'month') < 6
+            conditions: (date) => moment(new Date()).diff(moment(new Date(date)), 'month') < 6
         },
         {
             name: "Просрочен",
             color: "red",
-            conditions: (date) => moment(new Date()).diff(moment(new Date(date)), 'month') > 6
+            conditions: (date) => moment(new Date()).diff(moment(new Date(date)), 'month') >= 6
         }
     ]
 
@@ -88,7 +88,7 @@ export default function Staff (){
             align: "center",
             render: (date) => {
                 let item = pass.find(x => x.conditions(date) === true)
-                return item ? <Tag color={item.color}>{item.name}</Tag> : <Tag color="white">Неизвестно</Tag>
+                return <Tooltip placement="top" title={moment(new Date(date)).format('DD.MM.YYYY')}>{item ? <Tag color={item.color}>{item.name}</Tag> : <Tag color="orange">Неизвестно</Tag>}</Tooltip>
             },
             sorter: (a, b) => new Date(a.actualPassDate) - new Date(b.actualPassDate)
         },
@@ -103,27 +103,32 @@ export default function Staff (){
         },
     };
 
-    const search = (value) => {
-        setLoading(true)
-        setSearchData(state.staff.filter(x => Object.keys(x).some(index => {
-            let fieldValue = x[index];
+    const search = async (event) => {
+        if (event.target.value.length > 0) {
+            setLoading(true)
+            setSearchData(state.staff.filter(x => Object.keys(x).some(index => {
+                    let value = x[index];
 
-            if (index === "positionId") {
-                const position = state.positions.find(d => d.id === fieldValue)
-                fieldValue = position ? position.name : "Неизвестно"
-            }
+                    if (index === "positionId") {
+                        const position = state.positions.find(d => d.id === value)
+                        value = position ? position.name : "Неизвестно"
+                    }
 
-            if (index === "actualPassDate") {
-                const item = pass.find(x => x.conditions(fieldValue) === true)
-                fieldValue = item ? item.name : "Неизвестно"
-            }
+                    if (index === "actualPassDate") {
+                        const item = pass.find(x => x.conditions(value) === true)
+                        value = item ? item.name : "Неизвестно"
+                    }
 
-            if (index === "birthDate")
-                fieldValue = moment(new Date(fieldValue)).format('DD.MM.YYYY')
+                    if (index === "birthDate")
+                        value = moment(new Date(value)).format('DD.MM.YYYY')
 
-            return String(fieldValue).toLowerCase().includes(value.target.value.toLowerCase())}
-        )))
-        setLoading(false)
+                    return String(value).toLowerCase().includes(event.target.value.toLowerCase())
+                }
+            )))
+            setLoading(false)
+        } else {
+            setSearchData(null)
+        }
     }
 
     const removeStaff = () => {
@@ -138,12 +143,13 @@ export default function Staff (){
     return <>
 
         <HeaderPage title="Сотрудники">
-            <Button type="primary" onClick={addStaffToggle}><PlusOutlined /> Добавить сотрудника</Button>
+            <Button type="primary" onClick={addStaffToggle}><PlusOutlined/> Добавить сотрудника</Button>
         </HeaderPage>
 
         <div className="content">
             <Row className="staff-actions">
-                <Input className="search" prefix={<SearchOutlined />} onChange={search} placeholder={"Поиск"} />  {selectRows.length > 0 && <Button onClick={removeStaff}><DeleteOutlined/> Удалить</Button>}
+                <Input className="search" prefix={<SearchOutlined/>} onChange={search} placeholder={"Поиск"}/>
+                {selectRows.length > 0 && <Button onClick={removeStaff}><DeleteOutlined/> Удалить</Button>}
             </Row>
             <Table
                 loading={loading}
@@ -154,8 +160,8 @@ export default function Staff (){
             />
         </div>
 
-        <CreateStaff visible={addStaffVisible} toggleVisible={addStaffToggle} />
+        <CreateStaff visible={addStaffVisible} toggleVisible={addStaffToggle}/>
 
-   </>
+    </>
 
 }

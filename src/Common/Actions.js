@@ -1,7 +1,8 @@
-import {ADD_STAFF, REMOVE_STAFF, SET_AUTH, SET_POSITIONS, SET_STAFF} from "../reducer";
+import {ADD_STAFF, APPEND_STAFF, REMOVE_STAFF, SET_AUTH, SET_POSITIONS, SET_STAFF} from "../reducer";
 
 export const StaffAction = {
     set: (dispatch, staff) => dispatch({type: SET_STAFF, staff}),
+    append: (dispatch, staff) => dispatch({type: APPEND_STAFF, staff}),
     create: (dispatch, {fio, positionId, birthDate, actualPassDate}) => dispatch({type: ADD_STAFF, staff:{fio, positionId, birthDate, actualPassDate}}),
     remove: (dispatch, staff) => dispatch({type: REMOVE_STAFF, staff}),
 }

@@ -9,7 +9,7 @@ export default function CreateStaff (props){
     const {state, dispatch} = useContext(ContextApp)
     const [form] = Form.useForm();
 
-    const addEmployee = (values) => {
+    const addStaff = (values) => {
         StaffAction.create(dispatch, {...values, birthDate: values.birthDate.valueOf(), actualPassDate: values.actualPassDate.valueOf()})
         form.resetFields();
         toggleVisible()
@@ -21,12 +21,14 @@ export default function CreateStaff (props){
         placement="right"
         closable={false}
         visible={visible}
-        footer={<Row style={{float:"right"}}>
-            <Button onClick={toggleVisible}>Отменить</Button> <Button onClick={() => {form.submit()}} style={{marginLeft: 5}} type="primary">Сохранить</Button>
-        </Row>}
-    >
+        footer={
+            <Row style={{float:"right"}}>
+                <Button onClick={toggleVisible}>Отменить</Button>
+                <Button onClick={() => {form.submit()}} style={{marginLeft: 5}} type="primary">Сохранить</Button>
+            </Row>
+        }>
 
-        <Form layout="vertical" form={form} initialValues={{positionId: 1}} onFinish={addEmployee}>
+        <Form layout="vertical" form={form} initialValues={{positionId: 1}} onFinish={addStaff}>
             <Form.Item name="fio" label="ФИО сотрудника" rules={[{required: true, message:"Укажите ФИО"}]}>
                 <Input placeholder="Введите ФИО" />
             </Form.Item>

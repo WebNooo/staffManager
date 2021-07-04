@@ -5,6 +5,7 @@ export const SET_AUTH = "SET_AUTH";
 export const SET_POSITIONS = "SET_POSITIONS";
 
 export const SET_STAFF = "SET_STAFF";
+export const APPEND_STAFF = "APPEND_STAFF";
 export const ADD_STAFF = "ADD_STAFF";
 export const REMOVE_STAFF = "REMOVE_STAFF";
 
@@ -22,6 +23,8 @@ export function Reducer(state, action){
             return {...state, isAuth: action.status}
         case SET_STAFF:
             return {...state, staff: [...action.staff]}
+        case APPEND_STAFF:
+            return {...state, staff: [...state.staff, ...action.staff]}
         case SET_POSITIONS:
             return {...state, positions: [...action.positions]}
         case ADD_STAFF:
