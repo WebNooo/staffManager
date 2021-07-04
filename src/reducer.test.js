@@ -2,14 +2,18 @@
 import {Reducer} from "./reducer";
 import {AuthAction, PositionAction, StaffAction} from "./Common/Actions";
 
-const initialState = {
-    isAuth: false,
-    staff: [
+let initialState;
+
+beforeEach(() => {
+    initialState = {
+        isAuth: false,
+            staff: [
         {id: 1, fio:"test", positionId:1, birthDate:new Date(), actualPassDate:new Date()},
         {id: 2, fio:"test", positionId:1, birthDate:new Date(), actualPassDate:new Date()}
     ],
-    positions: []
-}
+        positions: []
+    }
+})
 
 it("Создание сотрудника", () => {
     let action = StaffAction.create((value) => value, {fio:"test", positionId:1, birthDate:new Date(), actualPassDate:new Date()})
@@ -36,7 +40,7 @@ it("Удаление сотрудников", () => {
     expect(newState.staff.length).toBe(1)
 })
 
-it("", () => {
+it("Добавление массива сотрундиков в стейт", () => {
     function randomDate(start, end) {
         return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toISOString().slice(0,10);
     }

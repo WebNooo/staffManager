@@ -38,7 +38,7 @@ export default function Staff() {
             }
         }).catch(reason => message.error("На сервере произошла ошибка, попробуйте позже"))
 
-    }, [])
+    }, [dispatch])
 
     const pass = [
         {
