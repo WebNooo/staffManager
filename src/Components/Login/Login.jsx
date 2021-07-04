@@ -1,4 +1,4 @@
-import {Button, Form, Input} from "antd";
+import {Button, Form, Input, message} from "antd";
 import {UserOutlined, LockOutlined} from '@ant-design/icons'
 import LoginLogo from '../../Assets/Images/worker-card.png'
 import "./Login.css"
@@ -29,7 +29,7 @@ function LoginForm() {
                 dispatch({type: SET_AUTH, auth: true})
             }
         } catch (e) {
-            throw new Error(e)
+            message.error("На сервере произошла ошибка, попробуйте позже.")
         }
     }
 
