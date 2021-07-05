@@ -3,8 +3,9 @@ import {UserOutlined, LockOutlined} from '@ant-design/icons'
 import LoginLogo from '../../Assets/Images/worker-card.png'
 import "./Login.css"
 import {useContext} from "react";
-import {ContextApp, SET_AUTH} from "../../reducer";
+import {ContextApp} from "../../reducer";
 import {authUser} from "../../Common/Api";
+import {AuthAction} from "../../Common/Actions";
 
 export default function Login() {
 
@@ -26,7 +27,7 @@ function LoginForm() {
             const response = await authUser()
             if (response.status === 201 && response.data.message === "success") {
                 localStorage.setItem("sessionId", "12345678")
-                dispatch({type: SET_AUTH, auth: true})
+                AuthAction.login(dispatch)
             }
         } catch (e) {
             message.error("На сервере произошла ошибка, попробуйте позже.")

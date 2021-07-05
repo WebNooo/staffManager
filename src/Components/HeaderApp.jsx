@@ -1,6 +1,7 @@
 import {Button, Layout} from "antd";
 import {useContext} from "react";
-import {ContextApp, SET_AUTH} from "../reducer";
+import {ContextApp} from "../reducer";
+import {AuthAction} from "../Common/Actions";
 
 export default function HeaderApp (){
 
@@ -9,8 +10,8 @@ export default function HeaderApp (){
     const {Header} = Layout
 
     const onLogout = () => {
-        dispatch({type: SET_AUTH, auth: false})
         localStorage.removeItem("sessionId")
+        AuthAction.logout(dispatch)
     }
 
     return <Header className={"header"}>
