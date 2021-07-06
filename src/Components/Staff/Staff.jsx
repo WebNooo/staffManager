@@ -13,6 +13,7 @@ export default function Staff() {
 
     const [loading, setLoading] = useState(true)
     const [selectRows, setSelectRows] = useState([])
+    // логичнее вместо null использовать пустой массив, т.к. searchData это по сути тот же staff
     const [searchData, setSearchData] = useState(null);
     const [addStaffVisible, setAddStaffVisible] = useState(false)
 
@@ -23,6 +24,7 @@ export default function Staff() {
                 //Position.set(dispatch, response.data)
 
                 //в апи у всех позиций одинаковый ID
+                // Это явно дефект API, надо было нам писать и говорить что ошибка)
                 PositionAction.set(dispatch, [
                     {id: 1, name: "Менеджер"},
                     {id: 2, name: "HR специалист"},
@@ -40,10 +42,12 @@ export default function Staff() {
 
     }, [dispatch])
 
+    // можно было вынести в константу или размапить таблицу сразу, добавив в tableColumns новое поле 'pass'
     const pass = [
         {
             name: "Действителен",
             color: "green",
+            // можно просто использовать moment()
             conditions: (date) => moment(new Date()).diff(moment(new Date(date)), 'month') < 5
         },
         {
@@ -62,6 +66,7 @@ export default function Staff() {
         {
             title: 'ФИО сотрудника',
             dataIndex: 'fio',
+            // я бы привёл в один регистр, чтобы сравнивалось корректно
             sorter: (a, b) => a.fio.localeCompare(b.fio)
         },
         {
@@ -86,6 +91,7 @@ export default function Staff() {
             dataIndex: 'actualPassDate',
             width: "10%",
             align: "center",
+            // смесь moment.js и нативной Date
             render: (date) => {
                 let item = pass.find(x => x.conditions(date) === true)
                 return <Tooltip placement="top" title={moment(new Date(date)).format('DD.MM.YYYY')}>{item ? <Tag color={item.color}>{item.name}</Tag> : <Tag color="orange">Неизвестно</Tag>}</Tooltip>
@@ -103,14 +109,19 @@ export default function Staff() {
         },
     };
 
+    // 1. происходит поиск по id полей
+    // 2. Вместе Object.keys можно взять Object.values и сразу искать по ним
     const search = async (event) => {
         if (event.target.value.length > 0) {
             setLoading(true)
             setSearchData(state.staff.filter(x => Object.keys(x).some(index => {
-                    let value = x[index];
 
-                    if (index === "positionId") {
-                        const position = state.positions.find(d => d.id === value)
+                let value = x[index];
+                
+                // значения index полей можно было сохранить в constants
+                if (index === "positionId") {
+                    const position = state.positions.find(d => d.id === value)
+                        // можно не заводить let переменную value, а сразу делать возврат в случае найденного значения...
                         value = position ? position.name : "Неизвестно"
                     }
 
@@ -122,6 +133,7 @@ export default function Staff() {
                     if (index === "birthDate")
                         value = moment(new Date(value)).format('DD.MM.YYYY')
 
+                    // ... а это как метод вынести и использовать использовать
                     return String(value).toLowerCase().includes(event.target.value.toLowerCase())
                 }
             )))
@@ -131,6 +143,7 @@ export default function Staff() {
         }
     }
 
+    // нужен useCallback чтобы функция кешировалась
     const removeStaff = () => {
         if (selectRows.length > 0) {
             StaffAction.remove(dispatch, selectRows)
@@ -138,6 +151,7 @@ export default function Staff() {
         }
     }
 
+    // нужен useCallback чтобы функция кешировалась
     const addStaffToggle = () => setAddStaffVisible(!addStaffVisible)
 
     return <>

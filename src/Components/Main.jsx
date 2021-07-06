@@ -1,15 +1,17 @@
-import {Layout} from "antd";
+import { Layout } from "antd";
 
 import Staff from "./Staff/Staff";
 import HeaderApp from "./HeaderApp";
 
 export default function Main() {
-    const {Content} = Layout;
+  const { Content } = Layout;
 
-    return <Layout style={{minHeight: "100vh"}}>
-        <HeaderApp/>
-        <Content>
-            <Staff/>
-        </Content>
+  return (
+    <Layout style={{ minHeight: "100vh" }}>
+      <HeaderApp />
+      <Content>
+        <Staff />
+      </Content>
     </Layout>
+  );
 }

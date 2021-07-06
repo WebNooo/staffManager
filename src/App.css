@@ -1,3 +1,5 @@
+/* часть стилей в общем файле, часть стилей в Login.css */
+
 @font-face {
   font-family: "Fira Sans";
   src: local("Fira Sans Regular"), url(./Assets/Fonts/FiraSans-Regular.woff);

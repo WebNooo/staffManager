@@ -7,6 +7,7 @@ import {ContextApp} from "../../reducer";
 import {authUser} from "../../Common/Api";
 import {AuthAction} from "../../Common/Actions";
 
+// отдельно в LoginLayout можно вынести
 export default function Login() {
 
 
@@ -25,6 +26,7 @@ function LoginForm() {
     const onFinish = async () => {
         try {
             const response = await authUser()
+            // нет смысла проверять 201 статус, со статусом ошибки и так падает в catch
             if (response.status === 201 && response.data.message === "success") {
                 localStorage.setItem("sessionId", "12345678")
                 AuthAction.login(dispatch)
