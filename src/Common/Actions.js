@@ -1,5 +1,13 @@
 import {ADD_STAFF, APPEND_STAFF, REMOVE_STAFF, SET_AUTH, SET_POSITIONS, SET_STAFF} from "../reducer";
 
+/* обычно делают возврат action как объект, например:
+
+setStaff = (staff) => ({ type: SET_STAFF, staff })
+
+и потом вызывают как аргумент dispatch метода в коде
+dispatch(setStaff({...}))
+
+*/
 export const StaffAction = {
     set: (dispatch, staff) => dispatch({type: SET_STAFF, staff}),
     append: (dispatch, staff) => dispatch({type: APPEND_STAFF, staff}),
